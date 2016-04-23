@@ -7,7 +7,7 @@ app.use(express.static('client'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-var lions = [];
+var lions = [{id:1},{id:2},{id:3}];
 var id = 0;
 
 app.get('/lions', function(req, res){
@@ -28,7 +28,28 @@ app.post('/lions', function(req, res) {
 
   res.json(lion);
 });
+app.post('/removeLions', function(req, res) {
+  var lion = req.body;
 
+
+  var removedLion = _.remove(lions, function(n) 
+  {
+    
+    n.id = n.id+"";
+    if(n.id === lion.id)
+    {
+        console.log("found the lion");
+        return n;
+    }
+    
+  });
+  
+  var lionInfo = {"lionRemoved": removedLion,
+                  "lionsRemaining": lions};
+  console.log("lions remaining");
+  console.log(lionInfo);
+  res.json(lionInfo);
+});
 
 app.put('/lions/:id', function(req, res) {
   var update = req.body;
